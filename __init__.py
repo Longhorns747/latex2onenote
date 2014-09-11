@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect
-import requests, random
+import requests, random, string
 import os
 app = Flask(__name__)
 
@@ -11,8 +11,7 @@ def home():
 def process_latex():
     latex_input = request.form['latex_input']
     accessToken = request.form['access_token']
-    randNum = random.randint(0, 200)
-    staticFilepath = 'static/latexFiles/' + randNum
+    staticFilepath = 'static/latexFiles/' + random.choice(string.letters) + random.choice(string.letters) +'/'
 
     d = os.path.dirname(staticFilepath)
     if not os.path.exists(d):
