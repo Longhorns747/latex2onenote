@@ -11,7 +11,7 @@ def home():
 def process_latex():
     latex_input = request.form['latex_input']
     accessToken = request.form['access_token']
-    randNum = random.randint()
+    randNum = random.randint(0, 200)
     staticFilepath = 'static/latexFiles/' + randNum
 
     d = os.path.dirname(staticFilepath)
@@ -39,7 +39,7 @@ def process_latex():
     bashCommand2 = "rm -rf " + staticFilepath
     process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, cwd=staticFilepath)
     output = process.communicate()[0]
-    
+
     return render_template("success.html", onenote_url=link)
 
 @app.route('/latex_input', methods=['GET', 'POST'])
