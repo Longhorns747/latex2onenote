@@ -28,7 +28,11 @@ def process_latex():
     f = open(staticFilepath + '/latex.html')
     finalHTML = f.read()
 
-    return finalHTML
+    url = "https://www.onenote.com/api/v1.0/pages"
+    headers = {'Content-Type' : 'Text/html', 'Authorization' : 'Bearer ' + request.form['access_token'] }
+    r = requests.post(url, data=finalHTML, headers=headers)
+
+    return r.text
 
 @app.route('/latex_input', methods=['GET', 'POST'])
 def microsoft_response():
