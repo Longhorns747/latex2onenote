@@ -9,7 +9,7 @@ def home():
 @app.route("/process", methods=['POST'])
 def process_latex():
     latex_input = request.form['latex_input']
-    staticFilepath = './'
+    staticFilepath = 'static/latexFiles'
 
     d = os.path.dirname(staticFilepath)
     if not os.path.exists(d):
