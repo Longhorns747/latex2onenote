@@ -12,6 +12,9 @@ def home():
 
 @app.route('/latex_input', methods=['GET', 'POST'])
 def microsoft_response():
+    if request.args.get('state', '') != session['state']:
+        return render_template("error.html", message="Hmmm, the state seems to be off here!")
+    
     authCode = request.args.get('code')
 
     f = open('static/client_secret.cfg', 'r+')
@@ -28,9 +31,6 @@ def microsoft_response():
 
 @app.route("/process", methods=['POST'])
 def process_latex():
-    if request.args.get('state', '') != session['state']:
-        return render_template("error.html", message="Hmmm, the state seems to be off here!")
-
     latex_input = request.form['latex_input']
     accessToken = request.form['access_token']
 
