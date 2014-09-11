@@ -9,13 +9,13 @@ def home():
 @app.route("/process", methods=['POST'])
 def process_latex():
     latex_input = request.form['latex_input']
-    staticFilepath = 'static/latexFiles'
+    staticFilepath = './'
 
     d = os.path.dirname(staticFilepath)
     if not os.path.exists(d):
         os.makedirs(d)
 
-    f = open('static/latexFiles/latex.tex', 'w')
+    f = open(staticFilepath + '/latex.tex', 'w')
     f.write(latex_input)
     f.close()
 
@@ -24,7 +24,7 @@ def process_latex():
     process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, cwd=staticFilepath)
     output = process.communicate()[0]
 
-    f = open('static/latexFiles/latex.html')
+    f = open(staticFilepath + '/latex.html')
     finalHTML = f.read()
 
     return finalHTML
