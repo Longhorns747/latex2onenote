@@ -35,9 +35,8 @@ def process_latex():
     jsonResponse = r.json()
 
     link = jsonResponse['links']['oneNoteWebUrl']['href']
-    bashCommand2 = "rm -rf " + staticFilepath
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, cwd=staticFilepath)
-    output = process.communicate()[0]
+    import shutil
+    shutil.rmtree(staticFilepath)
 
     return render_template("success.html", onenote_url=link)
 
