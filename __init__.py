@@ -29,5 +29,20 @@ def process_latex():
 
     return finalHTML
 
+@app.route('/latex_input', methods=['GET', 'POST'])
+def microsoft_response():
+    authCode = request.args.get('code')
+
+    f = open('static/client_secret.cfg', 'r+')
+    clientSecret = f.read()
+
+    url = 'https://login.live.com/oauth20_token.srf'
+    headers = {'Content-Type' : 'application/x-www-form-urlencoded'}
+    urlData = {'client_id' : '0000000044127D98', 'redirect_uri' : 'http://latex2onenote.cloudapp.net/latex_input', 'client_secret' : clientSecret, 'code' : authCode, 'grant_type' : 'authorization_code'}
+    r = requests.post(url, data=urlData, headers=headers)
+    jsonResponse = r.json()
+    accessToken = jsonResponse['access_token']
+    return render_template("latex_input.html", access_token=accessToken)
+
 if __name__ == "__main__":
     app.run(debug="true")
