@@ -81,6 +81,9 @@ def process_latex():
 
     return render_template("success.html", onenote_url=link)
 
+def back_to_input():
+    return render_template("latex_input.html")
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
