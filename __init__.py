@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 import requests, random, string
 import os
+from werkzeug import secure_filename
 app = Flask(__name__)
 
 ALLOWED_EXTENSIONS = set(['tex'])
