@@ -3,6 +3,8 @@ import requests, random, string
 import os
 app = Flask(__name__)
 
+ALLOWED_EXTENSIONS = set(['tex'])
+
 @app.route("/")
 def home():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -14,7 +16,7 @@ def home():
 def microsoft_response():
     if request.args.get('state', '') != session['state']:
         return render_template("error.html", message="Hmmm, the state seems to be off here!")
-    
+
     authCode = request.args.get('code')
 
     f = open('static/client_secret.cfg', 'r+')
@@ -31,7 +33,7 @@ def microsoft_response():
 
 @app.route("/process", methods=['POST'])
 def process_latex():
-    latex_input = request.form['latex_input']
+    #latex_input = request.form['latex_input']
     accessToken = request.form['access_token']
 
     #Make a randomly generated directory for latex compilation
@@ -45,9 +47,14 @@ def process_latex():
     else:
         return render_template("error.html", message="Oh no D:! Something went wrong :( Please try again!")
 
-    f = open(staticFilepath + '/latex.tex', 'w')
-    f.write(latex_input)
-    f.close()
+    file = request.files['latex']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(staticFilepath, filename))
+
+    #f = open(staticFilepath + '/latex.tex', 'w')
+    #f.write(latex_input)
+    #f.close()
 
     #Compile LaTeX
     bashCommand = "htlatex latex.tex"
@@ -69,6 +76,10 @@ def process_latex():
     shutil.rmtree(staticFilepath)
 
     return render_template("success.html", onenote_url=link)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 app.secret_key = open('static/app_key.cfg', 'r+').read()
 if __name__ == "__main__":
