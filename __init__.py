@@ -81,6 +81,7 @@ def process_latex():
 
     return render_template("success.html", onenote_url=link)
 
+@app.route("/back", methods=['GET'])
 def back_to_input():
     return render_template("latex_input.html")
 
