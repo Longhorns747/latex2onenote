@@ -66,7 +66,7 @@ def process_latex():
     process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, cwd=staticFilepath)
     output = process.communicate()[0]
 
-    f = open(staticFilepath + '/latex.html')
+    f = open(staticFilepath + '/' + filename.rsplit('.', 1)[0] + '.html')
     finalHTML = f.read()
 
     #Form POST request to the OneNote API
