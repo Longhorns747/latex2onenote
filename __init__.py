@@ -49,16 +49,19 @@ def process_latex():
         return render_template("error.html", message="Oh no D:! Something went wrong :( Please try again!")
 
     file = request.files['latex']
+    filename = ""
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         file.save(os.path.join(staticFilepath, filename))
+    else:
+        return render_template("error.html", message="Oh no D:! Something went wrong :( Please try again!")
 
     #f = open(staticFilepath + '/latex.tex', 'w')
     #f.write(latex_input)
     #f.close()
 
     #Compile LaTeX
-    bashCommand = "htlatex latex.tex"
+    bashCommand = "htlatex " + filename;
     import subprocess
     process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, cwd=staticFilepath)
     output = process.communicate()[0]
