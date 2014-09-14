@@ -29,13 +29,13 @@ def microsoft_response():
     urlData = {'client_id' : '0000000044127D98', 'redirect_uri' : 'http://latex2onenote.cloudapp.net/latex_input', 'client_secret' : clientSecret, 'code' : authCode, 'grant_type' : 'authorization_code'}
     r = requests.post(url, data=urlData, headers=headers)
     jsonResponse = r.json()
-    accessToken = jsonResponse['access_token']
-    return render_template("latex_input.html", access_token=accessToken)
+    session['accessToken'] = jsonResponse['access_token']
+    return render_template("latex_input.html")
 
 @app.route("/process", methods=['POST'])
 def process_latex():
     #latex_input = request.form['latex_input']
-    accessToken = request.form['access_token']
+    accessToken = session['accessToken']
 
     #Make a randomly generated directory for latex compilation
     staticFilepath = 'static/latexFiles/' + random.choice(string.letters) + random.choice(string.letters) + random.choice(string.letters) + '/'
